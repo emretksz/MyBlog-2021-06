@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "İletişim";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Header{
+    @Html.Partial("_Header", "Home")
+}
+<section class="ftco-section contact-section">
+    <div class="container">
+        <div class="row d-flex mb-5 contact-info">
+            <div class="col-md-12 mb-4">
+                <h2 class="h3 font-weight-bold">İletişim Bilgileri</h2>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-3 d-flex">
+                <div class="info bg-light p-4">
+                    <p><span>Address:</span> <br /> <a>Antalya</a> </p>
+                </div>
+            </div>
+
+            <div class="col-md-3 d-flex">
+                <div class="info bg-light p-4">
+                    <p><span>Email:</span> <br /> <a>emretkszz@gmail.com</a></p>
+                </div>
+            </div>
+            <div class="col-md-3 d-flex">
+                <div class="info bg-light p-3">
+                    <ul class="ftco-social mt-3">
+                        <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
+                        <li class="ftco-animate"><a href="#"><span class="icon-instagram"></span></a></li>
+                    </ul>
+                </div>
+            </div>
+          
+            @*<div class="col-md-3 d-flex">
+            <div class="info bg-light p-4">
+                <p><span>Website</span><br />  <a href="#">yoursite.com</a></p>
+            </div>
+        </div>*@
+        </div>
+       
+    </div>
+</section>
+

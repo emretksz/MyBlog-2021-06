@@ -1,0 +1,25 @@
+﻿
+@model  PagedList.IPagedList<MyBlog2021N.Models.Blogs>
+@using PagedList.Mvc;
+@using PagedList;
+
+@foreach (var item in Model)
+{
+<div class="blog-entry ftco-animate d-md-flex fadeInUp ftco-animated">
+    <a href="@Url.Action("BlogDetails","Home",new {id=item.BlogId })" class="img img-2" style="background-image: url(../../Content/images/bg_1.jpg);"></a>  
+    <div class="text text-2 p-4">
+        <h3 class="mb-2"><a href="@Url.Action("BlogDetails","Home",new {id=item.BlogId })">@item.Title</a></h3>
+        <div class="meta-wrap">
+            <p class="meta">
+                <span>@item.BlogDate.Value.ToString("yyy MM,dd")</span>
+                <span><a href="#">@item.Categories.Name</a></span>
+                <span>@item.Comments.Count</span>
+
+            </p>
+        </div>
+
+        <p class="mb-4">@item.SubDescription</p>
+        <p><a href="@Url.Action("BlogDetails","Home",new {id=item.BlogId })" class="btn-custom">Devamını Oku <span class="ion-ios-arrow-forward"></span></a></p>
+    </div>
+</div>
+}

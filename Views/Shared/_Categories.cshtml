@@ -1,0 +1,14 @@
+﻿@model  PagedList.PagedList<MyBlog2021N.Models.Categories>
+
+@using PagedList
+@using PagedList.Mvc
+@foreach (var categories in Model.Where(c => c.IsActive == true))
+{
+    <ul class="categories tag fa-filter ">
+        <li><a onclick="BlogFilter(@(categories.CategoryId))">@categories.Name <span>@categories.Blogs.Where(c => c.Categories.IsActive == true).Count()</span></a></li>
+        @*<li><a href="#">Technology <span>(8)</span></a></li>
+            <li><a href="#">Travel <span>(2)</span></a></li>
+            <li><a href="#">Food <span>(2)</span></a></li>
+            <li><a href="#">Photography <span>(7)</span></a></li>*@
+    </ul>
+}

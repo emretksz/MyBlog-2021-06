@@ -1,0 +1,50 @@
+﻿@model MyBlog2021N.Models.InstagramImages
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/ManagementPanel/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "InstagramImages", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>InstagramImages</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.ImageId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.ImageURL, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <img src="@Model.ImageURL" width="25%" /><br /><br />
+            <input type="file" name="imgFile" value="" />
+            @Html.ValidationMessageFor(model => model.ImageURL, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @*(List<MyBlog2021N.Models.InstagramImages>)ViewBag.Instagram*@
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.EditorFor(model => model.IsActive)
+                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

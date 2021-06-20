@@ -1,0 +1,158 @@
+﻿@model MyBlog2021N.Models.ViewModel.BlogViewModel
+@{
+    ViewBag.Title = "Blog";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@section Header{
+    @Html.Partial("_Header", "Home")
+}
+@section Footer{
+    @Html.Partial("_Footer")
+}
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row d-flex">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div id="blog-list" class="col-md-12">
+                        @Html.Partial("_BlogList", Model.Blogs)
+                    </div>
+                </div><!-- END-->
+                <div class="row">
+                    <div class="col">
+                        <div class="block-27">
+                            <ul>
+                                @*<li><a href="#">&lt;</a></li>*@
+                                <li class=" @(ViewBag.PageNumber==1?"active":"")"> <a href="@Url.Action("blog","home",new {pageNumber=1 })">1</a></li>
+                                <li class=" @(ViewBag.PageNumber==2?"active":"")"><a href="@Url.Action("blog","home",new {pageNumber=2 })">2</a></li>
+                                <li class=" @(ViewBag.PageNumber==3?"active":"")"><a href="@Url.Action("blog","home",new {pageNumber=3 })">3</a></li>
+                                @*<li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&gt;</a></li>*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 sidebar ftco-animate bg-light fadeInUp ftco-animated">
+              
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+
+                    <h3 class="sidebar-heading  ">Kategoriler</h3>
+                    @foreach (var categories in Model.Categories.Where(c => c.IsActive == true))
+                    {
+                        <ul class="categories tag fa-filter ">
+                            <li><a onclick="BlogFilter(@(categories.CategoryId))">@categories.Name <span>@categories.Blogs.Where(c => c.Categories.IsActive == true).Count()</span></a></li>
+                            @*<li><a href="#">Technology <span>(8)</span></a></li>
+                                <li><a href="#">Travel <span>(2)</span></a></li>
+                                <li><a href="#">Food <span>(2)</span></a></li>
+                                <li><a href="#">Photography <span>(7)</span></a></li>*@
+                        </ul>
+                    }
+                </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3 class="sidebar-heading">Popüler Yazılar</h3>
+                    @foreach (var item in Model.Blogs.OrderByDescending((b => b.BlogId)).Take(3))
+                    {
+                        <div class="block-21 mb-4 d-flex">
+                            <a class="blog-img mr-4" style="background-image: url( /Content/images/bg_1.jpg);"></a>
+                            <div class="text">
+                                <h3 class="heading"><a href=" @Url.Action("BlogDetails", "Home", new { id = item.BlogId })">@item.Title</a></h3>
+                                <div class="meta">
+                                    <div><a href="#"><span class="icon-calendar"></span> @item.BlogDate.Value.ToString("yyy MM,dd")</a></div>
+                                    <div><a href="#"><span class="icon-person"></span> @item.Author</a></div>
+                                    <div><a href="#"><span class="icon-chat"></span> @item.Comments.Count</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h5 id="tag-guest-name" hidden></h5> <a id="clear-tag-guest" class="tag-helper" hidden>Vazgeç</a>  <h5 id="tag-guest-id" hidden></h5>
+                </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3 class="sidebar-heading">Etiketler</h3>
+                    <ul class="tagcloud ">
+                        @foreach (var tag in Model.Tags)   // bir partical acayım orada tagsları döneyim. buraya @html.partica(_....,Model ismini verip göderecem, yukarıdaki gibi )
+                        {
+                            <a onclick="TagFilter(@(tag.TagId))">@tag.Name </a>
+                            @tag.BlogDetails.Where(t => t.IsActive == true).Count()
+                        }
+                    </ul>
+                </div>
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+
+                    <h3 class="sidebar-heading">Arşivler</h3>
+                    <ul class="categories">
+                        @foreach (var item in Model.Blogs)
+                        {
+                            <li><a href="#">@item.BlogDate.Value.ToString("yyy MM,dd")<span></span></a></li>
+
+                        }
+                    </ul>
+                </div>
+
+            </div><!-- END COL -->
+        </div>
+    </div>
+</section>
+@section Script{
+    <script>
+
+        //$('.tag-reply').click(function () {
+
+        //    var tagId = $(this).attr('id');
+        //    var Name = $(this).attr('#' + tagId).text();
+        //    $('#tag-guest-name').html(Name);
+        //    $('#tag-guest-name').removeAttr('hidden');
+        //    $('#tag-guest-id').html(tagId);
+        //    $('.tag-helper').removeAttr('hidden');
+        //}),
+        //    $('.tag-helper').click(function () {
+
+        //        $('tag-guest-name').html(' ');
+        //        $('tag-guest-name').attr('hidden', 'hidden');
+        //        $('tag-guest-id').html();
+        //        $('.tag-helper').attr('hidden', 'hidden');
+        //    }),
+
+        // blog list bölümü
+
+        function BlogFilter(categoryId) {
+
+            $.ajax({
+                url: '/Home/BlogList',
+                method: 'GET',
+                data: { categoryId },
+                success: function (data) {
+                    $('#blog-list').html(data);
+                },
+                error: function (data) {
+                    alert('bir hata oluştu')
+                }
+            })
+        }
+        function TagFilter(tagId) {
+            $.ajax({
+                url: '/HOME/TagList',
+                method: 'GET',
+                data: { tagId },
+                success: function (data) {
+                    $('#blog-list').html(data);
+                },
+                error: function (data) {
+                    alert('tag hatalı');
+                }
+            })
+        }
+
+
+    </script>
+}
+

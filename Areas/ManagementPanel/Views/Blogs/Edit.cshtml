@@ -1,0 +1,120 @@
+﻿@model MyBlog2021N.Models.Blogs
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Areas/ManagementPanel/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("Edit", "Blogs", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    
+<div class="form-horizontal">
+    <h4>Blogs</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.BlogId)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CategoryId, "CategoryId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("CategoryId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SubDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.SubDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.SubDescription, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Author, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Author, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Author, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.BlogDate, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBox("BlogDate", Model.BlogDate.Value.ToString("yyyy-MM-dd"), new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(model => model.BlogDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.UserId, "UserId", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("UserId", null, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.BlogDetails.IsActive, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.BlogDetails.IsActive, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.BlogDetails.IsActive, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.BlogDetails.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.BlogDetails.Description, new { @class = "form-control", id = "editor1" })
+            @Html.ValidationMessageFor(model => model.BlogDetails.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    @if (ViewBag.TagId != null)
+    {
+        foreach (var tags in (SelectList)ViewBag.TagId)
+        {
+            int tagId = Convert.ToInt32(tags.Value);
+            <input type="checkbox" @(Model.BlogDetails.Tags.Any(t => t.TagId == tagId) ? "Checked" : "") name="TagId" value="@tags.Value" />
+            <label>@tags.Text</label>
+        }
+    }
+    else
+    {
+        <label>Tag Yok !</label>
+    }
+
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.BlogDetails.ImageURL, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <img src="@Model.BlogDetails.ImageURL" width="25%" />
+            <br /> <br />
+            <input type="file" name="imgFile" />
+            @Html.ValidationMessageFor(model => model.BlogDetails.IsActive, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

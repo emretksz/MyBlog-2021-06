@@ -1,0 +1,45 @@
+﻿@model List<MyBlog2021N.Models.Comments>
+@foreach (var item in Model.Where(c => c.IsReply == null))
+{
+    <ul class="comment-list">
+        <li class="comment">
+            <div class="vcard bio">
+                <img src="~/Content/images/person_1.jpg" width="50" height="50" alt="Image placeholder">
+            </div>
+            <div class="comment-body">
+                <h3>
+                    <a id="@item.CommentId"> @item.NameSurname </a>
+                    <a class="reply comment-reply">
+                        <i class="icofont-reply"></i>
+                        Cevapla
+                    </a>
+                </h3>
+                <div class="meta">@item.RegisterDate.Value.ToString("yyyy-mm-dd tt")</div>
+                <p>@item.Comment</p>
+
+                @foreach (var reply in Model.Where(c => c.IsReply == item.CommentId))
+                {
+
+                    <div class="vcard bio">
+                        <img src="~/Content/images/person_1.jpg" width="50" height="50" alt="Image placeholder">
+                    </div>
+                    <div class="comment-body">
+                        <h3>
+                            <a id="@reply.CommentId"> @reply.NameSurname </a>
+                            <a class="reply comment-reply">
+                                <i class="icofont-reply"></i>
+                                Cevapla
+                            </a>
+                        </h3>
+                        <div class="meta">@reply.RegisterDate.Value.ToString("yyyy-mm-dd tt")</div>
+                        <p>@reply.Comment</p>
+                    </div>
+                }
+
+            </div>
+        </li>
+    </ul>
+}
+
+
+

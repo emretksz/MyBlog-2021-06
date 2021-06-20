@@ -1,0 +1,17 @@
+﻿
+
+
+<section class="ftco-section ftco-bread">
+    <div class="container">
+        <div class="row no-gutters slider-text justify-content-center align-items-center">
+            <div class="col-md-8 ftco-animate fadeInUp ftco-animated">
+                <p class="breadcrumbs"><span class="mr-2"><a href="@Url.Action("Index","Home")">Anasayfa</a></span> <span>@ViewBag.Title</span></p>
+                <h1 class="bread">@ViewBag.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+@*@if (ViewBag.Title == "Collection")
+{
+    ViewContext.RouteData.Values["Action"] = "Koleksiyon";
+}*@

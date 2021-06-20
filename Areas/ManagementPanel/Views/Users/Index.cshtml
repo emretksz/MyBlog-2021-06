@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MyBlog2021N.Models.Users>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Areas/ManagementPanel/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserDetails.NameSurname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserDetails.IsActive)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Email)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Password)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.UserDetails.NameSurname)
+    </td>
+    <th>
+        @Html.DisplayNameFor(model => model.UserDetails.IsActive)
+    </th>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.UserId }) |
+        @Html.ActionLink("Details", "Details", new { id = item.UserId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.UserId })
+    </td>
+</tr>
+}
+
+</table>

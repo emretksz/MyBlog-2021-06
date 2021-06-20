@@ -1,0 +1,189 @@
+﻿
+@model MyBlog2021N.Models.ViewModel.BlogViewModel
+@{
+    ViewBag.Title = "BlogDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Footer{
+    @Html.Partial("_Footer")
+}
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 ftco-animate fadeInUp ftco-animated">
+                <h2 class="mb-3 font-weight-bold">@Model.Blog.Title</h2>
+                @*<p>*@ @Html.Raw(Model.Blog.BlogDetails.Description)@*</p>*@
+
+                <div class="tag-widget post-tag-container mb-5 mt-5">
+                    <div class="tagcloud">
+                        @foreach (var item in Model.Blog.BlogDetails.Tags)
+                        {
+                            <a href="#" class="tag-cloud-link">@item.Name</a>
+                        }
+                    </div>
+                </div>
+
+                <div class="about-author d-flex p-4 bg-light">
+
+                    <div class="bio mr-5">
+                        <img src="~/Content/images/siteye gidecek.jpg"  width="80" height="80" alt="Image placeholder" class="img-fluid mb-4">
+                    </div>
+                    <div class="desc">
+                        <h3>@Model.Blog.Author</h3>
+                        <p>Yazarın Yorumu</p>
+                    </div>
+        
+                </div>
+
+                <!--  YORUMLARIN GÖRÜNECEĞİ KISIM  -->
+                <div class="pt-5 mt-5">
+                    <h3 class="mb-5 font-weight-bold comments-count ">Yorum Sayısı: @Model.Blog.Comments.Count</h3>
+                    <div id="comments-refresh">
+                        @Html.Partial("_BlogComments", Model.Blog.Comments.ToList())   <!--- Burada partialdan aldıgımız veriyi basıyoruz  -->
+                    </div>
+                    <!-- END comment-list -->
+                    <!--  kullancı ve mesaj kısmı    -->
+                    @Html.Hidden("BlogId", Model.Blog.BlogId)
+                    <div class="comment-form-wrap pt-5">
+                        <form action="#" class="p-3 p-md-5 bg-light">
+                            <h5 class="mb-3">Yorum Yaz</h5>
+                            <!-- BURADA YORUM YAZILACAK KİŞİNİN ADINI GÖSTERİYORUZ  -->
+                            <b class="comment-helper" hidden>Cevap Olarak : </b> <h5 id="comment-guest-name" hidden></h5> <a id="clear-comment-guest" class="comment-helper" hidden>Vazgeç</a>
+                            <h5 id="comment-guest-id" hidden></h5>
+                            <!-- Formdan verileri alıyoruz. BlogId Name Message -->
+                            <div class="form-group">
+                                <label for="name">Name *</label>
+                                <input type="text" class="form-control" id="comment-name">
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea name="" id="comment-message" cols="30" rows="10" class="form-control"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" id="comment-btn" class="btn py-3 px-4 btn-primary">
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- .col-md-8 -->      <!--   BLOGDAKİ YAZILAR VE TAGLAR -->
+
+            <div class="col-lg-4 sidebar ftco-animate bg-light fadeInUp ftco-animated">
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3 class="sidebar-heading">Kategoriler</h3>
+                    <ul class="categories">
+                        @foreach (var item in Model.Categories)
+                        {
+                            <li><a href="#">@item.Name <span>@item.Blogs.Count</span></a></li>
+
+                        }
+                    </ul>
+                </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3 class="sidebar-heading">Popüler Yazılar</h3>
+                            @foreach (var item in Model.Blogs.OrderByDescending(b => b.BlogId).Take(3))
+                            {
+                    <div class="block-21 mb-4 d-flex">
+                        <a class="blog-img mr-4" style=" background-image: url(../../Content/images/bg_1.jpg);"></a>
+                        <div class="text">
+                                <h3 class="heading"><a href="@Url.Action("BlogDetails","Home",new {id=item.BlogId })">@item.Title</a></h3>
+                                <div class="meta">
+
+                                    <div><a href="#"><span class="icon-calendar"></span> @item.BlogDate.Value.ToString("MM dd,yy ")</a></div>
+                                    <div><a href="#"><span class="icon-person"></span>@item.Author</a></div>
+                                    <div><a href="#"><span class="icon-chat"></span> @item.Comments.Count</a></div>
+                                </div>
+                        </div>
+                    </div>
+                            }
+
+                </div>
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3 class="sidebar-heading">Etiketler</h3>
+                    <ul class="tagcloud">
+                        @foreach (var item in Model.Tags)
+                        {
+                            <a href="#" class="tag-cloud-link">@item.Name</a>
+
+                        }
+                    </ul>
+                </div>
+
+
+                <div class="sidebar-box ftco-animate fadeInUp ftco-animated">
+                    <h3 class="sidebar-heading">Arşiv</h3>
+                    <ul class="categories">
+                        @foreach (var item in Model.Blogs)
+                        {
+                            <li><a href="#">@item.BlogDate.Value.ToString("MM yy") <span></span></a></li>
+                        }
+                    </ul>
+                </div>
+
+            </div><!-- END COL -->
+        </div>
+    </div>
+</section>
+
+@section Script{
+    <script>
+
+        $('.comment-reply').click(function () {
+            var commentId = $(this).parent().children().attr('id'); /// a tagının üstüne çıktık ve oradaki id'ye verdiğimiz commentId alıyoruz.
+            var nameSurname = $(this).parent().children('#' + commentId).text(); /// ismi aldık. ama Id'den gelen isim :)
+            $('#comment-guest-name').html(nameSurname); /// yorum yapılacak isim gösterilecek.
+            $('#comment-guest-name').removeAttr('hidden'); /// gizliliğini kaldırdık.
+            $('#comment-guest-id').html(commentId); //// commentID tuttuk ama hidden şu anda onu göstermek istemiyoruz.
+            $('.comment-helper').removeAttr('hidden'); /// gizli olan b ve a tagını görünür yaptık
+        })
+        $('#clear-comment-guest').click(function () { /// eger clear comment id'ye tıklanırsa
+            $('#comment-guest-name').html(' ');             // isimi sildik
+            $('#comment-guest-name').attr('hidden', 'hidden');/// o bölümü gizledik
+            $('#comment-guest-id').html();                      /// id temizlendi
+            $('.comment-helper').attr('hidden', 'hidden');   /// b ve a tagı izlendi
+        })
+
+    </script>
+
+    <script>
+        $('#comment-btn').click(function () {
+            var blogId = $('#BlogId').val();
+            var name = $('#comment-name').val();
+            var message = $('#comment-message').val();
+            var commentId = $('#comment-guest-id').text();
+
+            $.ajax({
+                url: '/Home/BlogComments',
+                method: 'POST',
+                async: false,
+                data: { blogId, name, message, commentId },
+                success: function (data) {
+                    $('#comment-refresh').html(data);
+                },
+
+                error: function (data) {
+                    alert("Veri Gelmedi");
+                }
+            })
+
+            $.ajax({                   //// yorumların sayısını öğrenmek için yazdık
+                url: '/HOME/CommentCounts',
+                method: 'GET',
+                async: false,
+                data: { blogId },
+                success: function (data) {
+                    $('.comments-count').html(data + ' ' + 'Yorum')
+                },
+                error: function (data) {
+                    alert("comment country sorun var");
+                }
+            })
+        })
+
+
+    </script>
+
+}

@@ -1,0 +1,26 @@
+﻿@model List<MyBlog2021N.Models.Tags>
+<div>
+    <div class="sidebar-box ftco-animate fadeInUp ftco-animated" id="abc">
+        <h3 class="sidebar-heading">Tag Cloud</h3>
+        <ul class="tagcloud">
+            @foreach (var tag in Model)
+            {
+                <li> <a onclick="TagFilter(@(tag.TagId))">@tag.Name </a></li>
+                <a id="@tag.TagId"> @tag.Name</a>
+            }
+        </ul>
+
+    </div>
+
+</div>
+@*<div class="sidebar-box ftco-animate fadeInUp ftco-animated" id="abc">
+        <h3 class="sidebar-heading">Tag Cloud</h3>
+                    <h3 class="mb-2"><a href="@Url.Action("tagFilter","Home",new {id=tag.TagId })">@tag.Name</a></h3>
+        @foreach (var tag in Model.Tags)   // bir partical acayım orada tagsları döneyim. buraya @html.partica(_....,Model ismini verip göderecem, yukarıdaki gibi )
+        {
+            <ul class="tagcloud">
+                <li> <a onclick="TagFilter(@(tag.TagId))">@tag.Name </a></li>
+
+            </ul>
+        }
+    </div>*@
